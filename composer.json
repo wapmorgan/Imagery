@@ -1,0 +1,15 @@
+{
+	"name": "wapmorgan/imagery",
+	"description": "Simple image editor for resizing, cropping, making collages and other elementary actions with images.",
+	"license": "MIT",
+	"keywords": ["images", "pHash"],
+	"require": {
+		"ext-gd": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Imagery\\": "src/"
+		},
+		"files": ["src/function.imagecreatefrombmp.php"]
+	}
+}
