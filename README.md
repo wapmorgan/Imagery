@@ -22,7 +22,7 @@ Imagery supports:
 
 # API
 ## Opening
-Create from existing file or make an empty area
+Create new Imagery object
 ```php
 use Imagery\Imagery;
 
@@ -99,8 +99,8 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
   Places an image in the center of current image.
 
 ## Tools
-There's a tools class: `Images/Tools`.
+There's a tools class: `Imagery/Tools`.
 
-- `public function pHash(Imagery $image, $sizes = array(8, 8))`
+- `static public function pHash(Imagery $image, $sizes = array(8, 8))`
 
   Calculates Perceptual hash of image.
