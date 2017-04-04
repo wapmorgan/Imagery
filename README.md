@@ -89,7 +89,8 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 ### Collage
 - `public function appendImageTo($side, Imagery $appendix, int $modifiers)`
 
-  Appends an image (`$appendix`) to current image at `$side` (`top|bottom|left|right`).
+  Appends an image (`$appendix`) to current image at `$side` (`top|bottom|left|right`). Modifiers:
+  - `Imagery::ZOOM_IF_LARGER` - appendix' height will be zoomed (not resized) if it's larger than current image's one (when appending to left or right side); appendix' width will be zoomed (not resized) if it's larger than current image's one (when appending to top or bottom side);
 - `public function placeImageAt($x, $y, Imagery $image)`
 
   Places an image atop current image at `$x` X `$y`.
