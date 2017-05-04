@@ -10,6 +10,6 @@
 		"psr-4": {
 			"Imagery\\": "src/"
 		},
-		"files": ["src/function.imagecreatefrombmp.php"]
+		"files": ["src/function.imagecreatefrombmp.php", "src/function.imagebmp.php"]
 	}
 }

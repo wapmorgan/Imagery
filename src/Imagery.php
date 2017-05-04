@@ -344,6 +344,10 @@ class Imagery {
 			case 'gif':
 				imagegif($this->_image, $filename);
 				break;
+			case IMAGETYPE_BMP:
+			case 'bmp':
+				imagebmp($this->_image, $filename);
+				break;
 			case IMAGETYPE_WBMP:
 			case 'wbmp':
 				imagewbmp($this->_image, $filename);

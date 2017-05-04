@@ -37,7 +37,7 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 
 ## Saving
 - `public function save($filename, $format, $quality)`
-  Saves image to disk. Possible `$format` values: jpeg, png, gif, wbmp. Quality is an integer value between `0` (worst) and `100` (best).
+  Saves image to disk. Possible `$format` values: jpeg, png, gif, bmp, wbmp. Quality is an integer value between `0` (worst) and `100` (best).
 
 ## Properties
 - `$width` - width of image
