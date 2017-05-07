@@ -1,10 +1,11 @@
 ## Imagery simplifies image manipulations.
 
-Imagery supports:
+_Imagery_ supports:
 - resizing
 - cropping
 - flipping and rotating
 - making collages
+- applying filters and effects
 
 [![Composer package](http://xn--e1adiijbgl.xn--p1acf/badge/wapmorgan/imagery)](https://packagist.org/packages/wapmorgan/imagery)
 [![Latest Stable Version](https://poser.pugx.org/wapmorgan/imagery/v/stable)](https://packagist.org/packages/wapmorgan/imagery)
