@@ -28,10 +28,14 @@ class Imagery {
 
 	/**
 	 * Constructor.
-	 * @param image_resource $image
+	 * @param image_resource $resource
 	 */
-	private function __construct($image) {
-		$this->_image = $image;
+	public function __construct($resource) {
+		if (!is_resource($resource))
+			throw new Exception('Invalid (resource) parameter! This is not a resource!');
+		if (get_resource_type($resource) != 'gd')
+			throw new Exception('Invalid (resource) parameter! Resource is not a gd resource!');
+		$this->_image = $resource;
 	}
 
 	/**
@@ -558,17 +562,5 @@ class Imagery {
 	static public function createWithSize($width, $height) {
 		$image = imagecreatetruecolor($width, $height);
 		return new self($image);
-	}
-
-	/**
-	 * Creates an instace from gd-resource
-	 * @param resource $resource Image resource
-	 */
-	static public function createFromResource($resource) {
-		if (!is_resource($resource))
-			throw new Exception('Invalid (resource) parameter! This is not a resource!');
-		if (get_resource_type($resource) != 'gd')
-			throw new Exception('Invalid (resource) parameter! Resource is not a gd resource!');
-		return new self($resource);
 	}
 }

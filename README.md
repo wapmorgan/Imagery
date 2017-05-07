@@ -31,8 +31,6 @@ $image = Imagery::createFromFile($filename);
 // or
 $image = Imagery::createWithSize($width, $height);
 // or
-$image = Imagery::createFromResource(imagecreatetruecolor(90, 90));
-// or
 $image = new Imagery(imagecreatefrombmp('image.bmp'));
 ```
 
