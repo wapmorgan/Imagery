@@ -1,0 +1,18 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+
+if (!isset($argv[1]))
+    die('Usage: '.basename(__FILE__).' <input image> <level=10>'.PHP_EOL);
+
+$file = $argv[1];
+$level = isset($argv[2]) ? max(1, min(8, intval($argv[2]))) : 1;
+echo 'Smooth Level: '.$level.PHP_EOL;
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+
+$file = pathinfo(realpath($file));
+$output_file = $file['dirname'].'/smooth'.$level.'_'.$file['filename'].'.'.$file['extension'];
+$imagery->smooth($level);
+$imagery->save($output_file, IMAGETYPE_PNG);
+echo 'Done'.PHP_EOL;

@@ -1,0 +1,22 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+
+if ($argc < 4)
+    die('Usage: '.basename(__FILE__).' <input image> <red> <green> <blue> [<alpha>]'.PHP_EOL);
+
+$file = $argv[1];
+$normalizer = function ($value) { return max(-255, min(255, $value)); };
+$red = $normalizer($argv[2]);
+$green = $normalizer($argv[3]);
+$blue = $normalizer($argv[4]);
+$alpha = isset($argv[5]) ? max(0, min(127, $argv[5])) : 127;
+echo 'red: '.$red.' green: '.$green.' blue: '.$blue.' alpha: '.$alpha.PHP_EOL;
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+
+$file = pathinfo(realpath($file));
+$output_file = $file['dirname'].'/colorize_'.$file['filename'].'.'.$file['extension'];
+$imagery->colorize($red, $green, $blue, $alpha);
+$imagery->save($output_file, IMAGETYPE_JPEG);
+echo 'Done'.PHP_EOL;

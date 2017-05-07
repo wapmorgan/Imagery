@@ -1,0 +1,18 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+
+if (!isset($argv[1]))
+    die('Usage: '.basename(__FILE__).' <input image> <newValue=100>'.PHP_EOL);
+
+$file = $argv[1];
+$newValue = isset($argv[2]) ? max(-100, min(100, intval($argv[2]))) : 100;
+echo 'New value: '.$newValue.PHP_EOL;
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+
+$file = pathinfo(realpath($file));
+$output_file = $file['dirname'].'/contrast_'.$file['filename'].'.'.$file['extension'];
+$imagery->changeContrast($newValue);
+$imagery->save($output_file, IMAGETYPE_PNG);
+echo 'Done'.PHP_EOL;

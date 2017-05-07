@@ -1,12 +1,20 @@
 <?php
 namespace Imagery;
 
+use Exception;
+
 /**
  * This is a simple image editor
  */
 class Imagery {
 
 	const ZOOM_IF_LARGER = 1;
+
+	const FILTER_NEGATE = IMG_FILTER_NEGATE;
+	const FILTER_GRAYSCALE = IMG_FILTER_GRAYSCALE;
+
+	const GAUSSIAN_BLUR = IMG_FILTER_GAUSSIAN_BLUR;
+	const SELECTIVE_BLUR = IMG_FILTER_SELECTIVE_BLUR;
 
 	/**
 	 * Resource
@@ -393,6 +401,95 @@ class Imagery {
 				$this->_image = $image;
 			}
 		}
+		return $this;
+	}
+
+	/**
+	 * Applies a filter to image
+	 * @param int One of FILTER_* constants
+	 * @return Imagery this object
+	 */
+	public function filter($filter) {
+		if (!in_array($filter, array(self::FILTER_NEGATE, self::FILTER_GRAYSCALE)))
+			return false;
+		imagefilter($this->resource, $filter);
+		return $this;
+	}
+
+	/**
+	 * Changes contrast of image
+	 * @param int $newValue Range from 100 (max contrast) to -100 (min contrast). 0 means no change
+	 * @return Imagery this object
+	 */
+	public function changeContrast($newValue) {
+		// - means inversion of value. Do not delete.
+		$newValue = -max(-100, min(100, $newValue));
+		imagefilter($this->resource, IMG_FILTER_CONTRAST, $newValue);
+		return $this;
+	}
+
+	/**
+	 * Changes brightness of image
+	 * @param int $newValue Range from 255 (max brightness) to -255 (min brightness). 0 means no change
+	 * @return Imagery this object
+	 */
+	public function changeBrightness($newValue) {
+		$newValue = max(-255, min(255, $newValue));
+		imagefilter($this->resource, IMG_FILTER_BRIGHTNESS, $newValue);
+		return $this;
+	}
+
+	/**
+	 * Changes colors of image
+	 * @param int $red Range from 255 to -255
+	 * @param int $green Range from 255 to -255
+	 * @param int $blue Range from 255 to -255
+	 * @param int $alpha Range from 255 to -255
+	 * @return Imagery this object
+	 */
+	public function colorize($red, $green, $blue, $alpha = 127) {
+		$normalizer = function ($value) { return max(-255, min(255, $value)); };
+		$red = $normalizer($red);
+		$green = $normalizer($green);
+		$blue = $normalizer($blue);
+		$alpha = min(127, max(0, $alpha));
+		imagefilter($this->resource, IMG_FILTER_COLORIZE, $red, $green, $blue, $alpha);
+		return $this;
+	}
+
+	/**
+	 * Blurs an image
+	 * @param int $method One of blue methods: GAUSSIAN_BLUR or SELECTIVE_BLUR
+	 * @return Imagery this object
+	 */
+	public function blur($method = self::GAUSSIAN_BLUR) {
+		if (!in_array($method, array(self::GAUSSIAN_BLUR, self::SELECTIVE_BLUR)))
+			return false;
+		imagefilter($this->resource, $method);
+		return $this;
+	}
+
+	/**
+	 * Smooths an image
+	 * @param int $level Level of smoothness. Range from 0 to 8. 8 is un-smooth.
+	 * @return Imagery this object
+	 */
+	public function smooth($level = 1) {
+		$level = max(1, min(8, $level));
+		if ($level == 8) $level = 9;
+		// inversion is needed. Do not delete.
+		imagefilter($this->resource, IMG_FILTER_SMOOTH, -$level);
+		return $this;
+	}
+
+	/**
+	 * Pixelates an image
+	 * @param int $blockSize Size of pixel block
+	 * @param boolean $useModernEffect Use or not to use new pixelate effect
+	 * @return Imagery this object
+	 */
+	public function pixelate($blockSize = 5, $useModernEffect = true) {
+		imagefilter($this->resource, IMG_FILTER_PIXELATE, $blockSize, $useModernEffect);
 		return $this;
 	}
 

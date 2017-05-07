@@ -1,0 +1,18 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+use Imagery\Filters;
+
+if (!isset($argv[1]))
+    die('Usage: '.basename(__FILE__).' [options] <input image>'.PHP_EOL);
+
+$file = $argv[1];
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+
+$file = pathinfo(realpath($file));
+$file = $file['dirname'].'/bhthreshold_'.$file['filename'].'.'.$file['extension'];
+
+$result = Filters::bhThreshold($imagery);
+$result->save($file, IMAGETYPE_PNG);
+echo 'Done'.PHP_EOL;

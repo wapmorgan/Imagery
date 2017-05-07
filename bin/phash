@@ -1,0 +1,16 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+use Imagery\Tools;
+
+if (!isset($argv[1]))
+    die('Usage: '.basename(__FILE__).' [options] <input image>'.PHP_EOL.
+        'Options:'.PHP_EOL.
+        '--size [8] Size of pHash'.PHP_EOL);
+
+$file = $argv[1];
+$size = max(2, in_array('--size', $argv) ? $argv[array_search('--size', $argv) + 1] : 8);
+echo 'Size set to '.$size.'x'.$size.PHP_EOL;
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+echo 'Perceptial hash for image: '.Tools::pHash($imagery).PHP_EOL;

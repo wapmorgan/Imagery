@@ -1,0 +1,19 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+
+if (!isset($argv[1]))
+    die('Usage: '.basename(__FILE__).' <input image> <filter=grayscale>'.PHP_EOL);
+
+$file = $argv[1];
+$filters = array('grayscale' => Imagery::FILTER_GRAYSCALE, 'negate' => Imagery::FILTER_NEGATE);
+$filter = isset($argv[2]) && in_array($argv[2], $filters) ? $argv[2] : 'grayscale';
+echo 'Filter: '.$filter.PHP_EOL;
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+
+$file = pathinfo(realpath($file));
+$output_file = $file['dirname'].'/filter_'.$file['filename'].'.'.$file['extension'];
+$imagery->filter($filters[$filter]);
+$imagery->save($output_file, IMAGETYPE_PNG);
+echo 'Done'.PHP_EOL;

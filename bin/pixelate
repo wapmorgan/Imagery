@@ -1,0 +1,18 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+
+if (!isset($argv[1]))
+    die('Usage: '.basename(__FILE__).' <input image> <blockSize=5>'.PHP_EOL);
+
+$file = $argv[1];
+$blockSize = isset($argv[2]) ? max(5, intval($argv[2])) : 5;
+echo 'Block size: '.$blockSize.PHP_EOL;
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+
+$file = pathinfo(realpath($file));
+$output_file = $file['dirname'].'/pixelate_'.$file['filename'].'.'.$file['extension'];
+$imagery->pixelate($blockSize);
+$imagery->save($output_file, IMAGETYPE_PNG);
+echo 'Done'.PHP_EOL;

@@ -1,0 +1,18 @@
+<?php
+require_once __DIR__.'/../vendor/autoload.php';
+use Imagery\Imagery;
+
+if (!isset($argv[1]))
+    die('Usage: '.basename(__FILE__).' <input image> <useGaussian=1>'.PHP_EOL);
+
+$file = $argv[1];
+$useGaussian = isset($argv[2]) ? (boolean)$argv[2] : true;
+echo 'Use gaussian: '.(int)$useGaussian.PHP_EOL;
+$imagery = Imagery::createFromFile($file);
+echo 'Input image: '.$imagery->width.'x'.$imagery->height.' '.$file.PHP_EOL;
+
+$file = pathinfo(realpath($file));
+$output_file = $file['dirname'].'/blur_'.$file['filename'].'.'.$file['extension'];
+$imagery->blur($useGaussian ? Imagery::GAUSSIAN_BLUR : Imagery::SELECTIVE_BLUR);
+$imagery->save($output_file, IMAGETYPE_PNG);
+echo 'Done'.PHP_EOL;
