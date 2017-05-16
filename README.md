@@ -27,9 +27,9 @@ Create new Imagery object
 ```php
 use Imagery\Imagery;
 
-$image = Imagery::createFromFile($filename);
+$image = Imagery::open($filename);
 // or
-$image = Imagery::createWithSize($width, $height);
+$image = Imagery::create($width, $height);
 // or
 $image = new Imagery(imagecreatefrombmp('image.bmp'));
 ```
@@ -102,15 +102,15 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 - `public function filter($filter)`
 
   Applies grayscale or negate filter. Pass `Imagery::FILTER_NEGATE` or `Imagery::FILTER_GRAYSCALE` as $filter.
-  
+
   Grayscale:
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Grayscale](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/grayscale_original.png)
-  
+
   Negate:
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/negate_original.png)
@@ -118,7 +118,7 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 - `public function changeContrast($newValue)`
 
   Changes contrast of image. New values can be in range from 100 (max contrast) to -100 (min contrast), 0 means no change.
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/contrast_original.png)
@@ -126,7 +126,7 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 - `public function changeBrightness($newValue)`
 
   Changes brightness of image. New values can be in range from 255 (max brightness) to -255 (min brightness), 0 means no change.
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/brightness_original.png)
@@ -134,7 +134,7 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 - `public function colorize($red, $green, $blue, $alpha = 127)`
 
   Changes colors of image. Colors (`$red, $green, $blue`) can be in range from 255 to -255. `$alpha` from 127 to 0.
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/colorize_original.png)
@@ -142,7 +142,7 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 - `public function blur($method)`
 
   Blurs an image. Method can be `Imagery::GAUSSIAN_BLUR` or `Imagery::SELECTIVE_BLUR`.
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/blur_original.png)
@@ -150,7 +150,7 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 - `public function smooth($level)`
 
   Smooths an image. Level of smoothness can be in range from 0 to 8. 8 is un-smooth.
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/smooth_original.png)
@@ -158,7 +158,7 @@ $image = new Imagery(imagecreatefrombmp('image.bmp'));
 - `public function pixelate($blockSize = 5, $useModernEffect = true)`
 
   Pixelates an image. `$blockSize` is size of pixel block.
-  
+
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/pixelate_original.png)

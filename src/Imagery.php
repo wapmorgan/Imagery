@@ -21,9 +21,73 @@ class Imagery {
 	 */
 	private $_image;
 
-	public function __get($name) {
-		if (method_exists($this, 'get'.$name))
-			return call_user_func(array($this, 'get'.$name));
+	/**
+	 * Creates an instance from existing file
+	 * @param string $filename
+	 * Note that gif animation will be destroyed.
+	 */
+	static public function open($filename) {
+		if (!file_exists($filename))
+			throw new Exception('Invalid (filename) parameter! File does not exist!');
+
+		$image_info = getimagesize($filename);
+		if ($image_info === false)
+			throw new Exception('Invalid (filename) parameter! File is corrupted!');
+
+		switch ($image_info[2]) {
+			case IMAGETYPE_JPEG:
+			case IMAGETYPE_JPEG2000:
+				$image = imagecreatefromjpeg($filename);
+				break;
+			case IMAGETYPE_PNG:
+				$image = imagecreatefrompng($filename);
+				break;
+			case IMAGETYPE_GIF:
+				$image = imagecreatefromgif($filename);
+				break;
+			case IMAGETYPE_WBMP:
+				$image = imagecreatefromwbmp($filename);
+				break;
+			case IMAGETYPE_BMP:
+				$image = imagecreatefrombmp($filename);
+				break;
+			default:
+				throw new Exception('Unknown image format!');
+				break;
+		}
+		imagealphablending($image, false);
+		imagesavealpha($image, true);
+
+		return new self($image);
+	}
+
+	/**
+	 * Tries to create an instance from file.
+	 * If success, returns instance. Otherwise, null.
+	 * It is a shortcut in this use:
+	 * <code>
+	 * if (($image = Imagery::tryCreateFromFile($filename)) === null) {
+	 *     throw new CHttpException(400);
+	 * }
+	 * </code>
+	 */
+	static public function tryOpen($filename) {
+		try {
+			$instance = self::createFromFile($filename);
+			return $instance;
+		} catch (\Exception $exception) {
+			return null;
+		}
+	}
+
+	/**
+	 * Creates an instance with specified size
+	 * @param int $width Image width
+	 * @param int $height Image height
+	 */
+	static public function create($width, $height) {
+		$image = imagecreatetruecolor($width, $height);
+		return new self($image);
 	}
 
 	/**
@@ -57,6 +121,14 @@ class Imagery {
 	}
 
 	/**
+	 * Getter
+	 */
+	public function __get($name) {
+		if (method_exists($this, 'get'.$name))
+			return call_user_func(array($this, 'get'.$name));
+	}
+
+	/**
 	 * Returns image width
 	 * @return int
 	 */
@@ -73,6 +145,13 @@ class Imagery {
 	}
 
 	/**
+	 * Returns an image resource
+	 */
+	public function getResource() {
+		return $this->_image;
+	}
+
+	/**
 	 * Copies an image fron another instance with zoom
 	 * @param Imagery $source An image that will be source for resampling
 	 * @return Imagery this object
@@ -82,12 +161,6 @@ class Imagery {
 		return $this;
 	}
 
-	/**
-	 * Returns an image resource
-	 */
-	public function getResource() {
-		return $this->_image;
-	}
 
 	/**
 	 * Cuts a rectangular piece of image
@@ -101,6 +174,8 @@ class Imagery {
 		$width = $x2 - $x;
 		$height = $y2 - $y;
 		$image = imagecreatetruecolor($width, $height);
+		imagealphablending($image, false);
+		imagesavealpha($image, true);
 		imagecopyresampled($image, $this->_image, 0, 0, $x, $y, $width, $height);
 		imagedestroy($this->_image);
 		$this->_image = $image;
@@ -312,15 +387,6 @@ class Imagery {
 
 	/**
 	 * Saves an image to file
-	 * @see save()
-	 * @deprecated
-	 */
-	public function saveToFile() {
-		return call_user_func_array(array($this, 'save'), func_get_args());
-	}
-
-	/**
-	 * Saves an image to file
 	 * @param string $filename Filename
 	 * @param mixed $format Image format. Can be either a string or a defined constant IMAGETYPE_xxx
 	 * Formats:
@@ -495,72 +561,5 @@ class Imagery {
 	public function pixelate($blockSize = 5, $useModernEffect = true) {
 		imagefilter($this->resource, IMG_FILTER_PIXELATE, $blockSize, $useModernEffect);
 		return $this;
-	}
-
-	/**
-	 * Creates an instance from existing file
-	 * @param string $filename
-	 * Note that gif animation will be destroyed.
-	 */
-	static public function createFromFile($filename) {
-		if (!file_exists($filename))
-			throw new Exception('Invalid (filename) parameter! File does not exist!');
-
-		$image_info = getimagesize($filename);
-		if ($image_info === false)
-			throw new Exception('Invalid (filename) parameter! File is corrupted!');
-
-		switch ($image_info[2]) {
-			case IMAGETYPE_JPEG:
-			case IMAGETYPE_JPEG2000:
-				$image = imagecreatefromjpeg($filename);
-				break;
-			case IMAGETYPE_PNG:
-				$image = imagecreatefrompng($filename);
-				break;
-			case IMAGETYPE_GIF:
-				$image = imagecreatefromgif($filename);
-				break;
-			case IMAGETYPE_WBMP:
-				$image = imagecreatefromwbmp($filename);
-				break;
-			case IMAGETYPE_BMP:
-				$image = imagecreatefrombmp($filename);
-				break;
-			default:
-				throw new Exception('Unknown image format!');
-				break;
-		}
-
-		return new self($image);
-	}
-
-	/**
-	 * Tries to create an instance from file.
-	 * If success, returns instance. Otherwise, null.
-	 * It is a shortcut in this use:
-	 * <code>
-	 * if (($image = Imagery::tryCreateFromFile($filename)) === null) {
-	 *     throw new CHttpException(400);
-	 * }
-	 * </code>
-	 */
-	static public function tryCreateFromFile($filename) {
-		try {
-			$instance = self::createFromFile($filename);
-			return $instance;
-		} catch (\Exception $exception) {
-			return null;
-		}
-	}
-
-	/**
-	 * Creates an instance with specified size
-	 * @param int $width Image width
-	 * @param int $height Image height
-	 */
-	static public function createWithSize($width, $height) {
-		$image = imagecreatetruecolor($width, $height);
-		return new self($image);
 	}
 }
