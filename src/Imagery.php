@@ -101,7 +101,7 @@ class Imagery {
 		$width = $x2 - $x;
 		$height = $y2 - $y;
 		$image = imagecreatetruecolor($width, $height);
-		imagecopy($image, $this->_image, 0, 0, $x, $y, $width, $height);
+		imagecopyresampled($image, $this->_image, 0, 0, $x, $y, $width, $height);
 		imagedestroy($this->_image);
 		$this->_image = $image;
 		return $this;
