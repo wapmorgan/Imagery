@@ -31,7 +31,6 @@ Create new Imagery object:
 - `$image = Imagery::open($filename);` - from a file
 - `$image = Imagery::create($width, $height);` - new image
 - `$image = new Imagery(imagecreatefrombmp('image.bmp'));` - from a resource
-```
 
 ### Saving
 - `public function save($filename, $quality = 75, $format = null)` - saves image to disk.
