@@ -62,31 +62,14 @@ class Imagery {
 	}
 
 	/**
-	 * Tries to create an instance from file.
-	 * If success, returns instance. Otherwise, null.
-	 * It is a shortcut in this use:
-	 * <code>
-	 * if (($image = Imagery::tryCreateFromFile($filename)) === null) {
-	 *     throw new CHttpException(400);
-	 * }
-	 * </code>
-	 */
-	static public function tryOpen($filename) {
-		try {
-			$instance = self::createFromFile($filename);
-			return $instance;
-		} catch (\Exception $exception) {
-			return null;
-		}
-	}
-
-	/**
 	 * Creates an instance with specified size
 	 * @param int $width Image width
 	 * @param int $height Image height
 	 */
 	static public function create($width, $height) {
 		$image = imagecreatetruecolor($width, $height);
+		imagealphablending($image, false);
+		imagesavealpha($image, true);
 		return new self($image);
 	}
 
@@ -117,6 +100,8 @@ class Imagery {
 		$width = imagesx($source);
 		$height = imagesy($source);
 		$this->_image = imagecreatetruecolor($width, $height);
+		imagealphablending($image, false);
+		imagesavealpha($image, true);
 		imagecopy($this->_image, $source, 0, 0, 0, 0, $width, $height);
 	}
 
@@ -179,6 +164,7 @@ class Imagery {
 		imagecopyresampled($image, $this->_image, 0, 0, $x, $y, $width, $height);
 		imagedestroy($this->_image);
 		$this->_image = $image;
+
 		return $this;
 	}
 
@@ -219,6 +205,8 @@ class Imagery {
 	 */
 	public function resize($width, $height) {
 		$image = imagecreatetruecolor($width, $height);
+		imagealphablending($image, false);
+		imagesavealpha($image, true);
 		imagecopyresampled($image, $this->_image, 0, 0, 0, 0, $width, $height, $this->width, $this->height);
 		imagedestroy($this->_image);
 		$this->_image = $image;
@@ -252,7 +240,7 @@ class Imagery {
 	 * @param int $size New size of larger side
 	 * @return Imagery this object
 	 */
-	public function zoom($size) {
+	public function zoomMaxSide($size) {
 		$currentSize = max($this->height, $this->width);
 		$ratio = round($currentSize / $size, 3);
 		$this->resize($this->width / $ratio, $this->height / $ratio);
@@ -296,6 +284,8 @@ class Imagery {
 		}
 
 		// imagecopyresampled(dst_image, src_image, dst_x, dst_y, src_x, src_y, dst_w, dst_h, src_w, src_h)
+		imagealphablending($image, false);
+		imagesavealpha($image, true);
 		switch ($side) {
 			case 'top':
 				imagecopyresampled($image, $appendix->resource, 0, 0, 0, 0, $appendix->width, $appendix->height, $appendix->width, $appendix->height);
@@ -373,24 +363,21 @@ class Imagery {
 	 * If not set, save function will be called without passing quality param.
 	 * @return Imagery this object
 	 */
-	public function save($filename, $format, $quality = null) {
+	public function save($filename, $quality = 75, $format = null) {
+		if
+		if ($format === null) {
+			$format = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+		}
 		switch ($format) {
 			case IMAGETYPE_JPEG:
 			case 'jpeg':
 			case 'jpg':
-				if ($quality === null)
-					imagejpeg($this->_image, $filename);
-				else
-					imagejpeg($this->_image, $filename, $quality);
+				imagejpeg($this->_image, $filename, $quality);
 				break;
 			case IMAGETYPE_PNG:
 			case 'png':
-				if ($quality === null)
-					imagepng($this->_image, $filename);
-				else {
-					$quality = 9 - floor($quality / 11);
-					imagepng($this->_image, $filename, $quality);
-				}
+				$quality = 9 - floor($quality / 11);
+				imagepng($this->_image, $filename, $quality);
 				break;
 			case IMAGETYPE_GIF:
 			case 'gif':
