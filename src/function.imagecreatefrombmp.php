@@ -1,4 +1,7 @@
 <?php
+if (function_exists('imagecreatefrombmp'))
+    return false;
+
 /*********************************************/
 /* Fonction: ImageCreateFromBMP              */
 /* Author:   DHKold                          */
