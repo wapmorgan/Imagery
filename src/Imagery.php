@@ -248,38 +248,12 @@ class Imagery {
 	}
 
 	/**
-	 * Decreases proportionally image width to new size, if needed
-	 * @param int $size New value of width
+	 * Zoomes proportionally larger side to new size, if needed
+	 * @param int $size New size of larger side
 	 * @return Imagery this object
 	 */
-	public function decreaseWidthTo($size) {
-		if ($this->width <= $size)
-			return;
-		$this->zoomWidthTo($size);
-		return $this;
-	}
-
-	/**
-	 * Decreases proportionally image height to new size, if needed
-	 * @param int $size New value of height
-	 * @return Imagery this object
-	 */
-	public function decreaseHeightTo($size) {
-		if ($this->height <= $size)
-			return;
-		$this->zoomHeightTo($size);
-		return $this;
-	}
-
-	/**
-	 * Decreases proportionally larger side to new size, if needed
-	 * @param int $size New max value of sides
-	 * @return Imagery this object
-	 */
-	public function decreaseTo($size) {
+	public function zoom($size) {
 		$currentSize = max($this->height, $this->width);
-		if ($currentSize <= $size)
-			return;
 		$ratio = round($currentSize / $size, 3);
 		$this->resize($this->width / $ratio, $this->height / $ratio);
 		return $this;
