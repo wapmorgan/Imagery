@@ -22,68 +22,39 @@ _Imagery_ supports:
 ```
 
 # API
-## Opening
-Create new Imagery object
+## Imagery
 ```php
 use Imagery\Imagery;
-
-$image = Imagery::open($filename);
-// or
-$image = Imagery::create($width, $height);
-// or
-$image = new Imagery(imagecreatefrombmp('image.bmp'));
+```
+### Opening
+Create new Imagery object:
+- `$image = Imagery::open($filename);` - from a file
+- `$image = Imagery::create($width, $height);` - new image
+- `$image = new Imagery(imagecreatefrombmp('image.bmp'));` - from a resource
 ```
 
-## Saving
-- `public function save($filename, $format, $quality)`
-  Saves image to disk. Possible `$format` values: jpeg, png, gif, bmp, wbmp. Quality is an integer value between `0` (worst) and `100` (best).
+### Saving
+- `public function save($filename, $quality = 75, $format = null)` - saves image to disk.
+Possible `$format` values: `jpeg, png, gif, bmp, wbmp`. Quality is an integer value between `0` (worst) and `100` (best). Default is `75`. If `$format` can not be determined by filename extension, specifcy it explicitly.
 
-## Properties
-- `$width` - width of image
-- `$height` - height of image
-- `$resource` - original gd-resource of image (you can use it with gd-functions)
+### Properties
+- `$image->width` - width of image
+- `$image->height` - height of image
+- `$image->resource` - original gd-resource of image (you can use it with gd-functions)
 
-## Imagery
 ### Resize && Zoom
 - `public function resize(int $width, int $height)` - resizes an image to `$width` X `$height`
-
-**To minimize**
-- `public function decreaseWidthTo(int $size)`
-
-  Decreases proportionally image width to `$size`, if needed
-
-- `public function decreaseHeightTo(int $size)`
-
-  Decreases proportionally image height to `$size`, if needed
-
-- `public function decreaseTo(int $size)`
-
-  Decreases proportionally larger side to `$size`, if needed
-
-**To maximize**
-- `public function zoomWidthTo(int $size)`
-
-  Changes proportionally image width to `$size`
-- `public function zoomHeightTo(int $size)`
-
-  Changes proportionally image height to `$size`
+- `public function zoomWidthTo(int $size)` - changes proportionally image width to `$size`
+- `public function zoomHeightTo(int $size)` - changes proportionally image height to `$size`
+- `public function zoomMaxSide(int $size)` - zoomes proportionally larger side to `$size`, if needed
 
 ### Crop
-- `public function crop($x, $y, $x2, $y2)`
-
-  Cuts a rectangular piece of image
-
-- `public function decreaseSide($side, int $size)`
-
-  Deletes a piece of image from specific side. For example, if $side=top and $size=100, 100px from top will be deleted.
+- `public function crop($x, $y, $x2, $y2)` - cuts a rectangular piece of image
+- `public function decreaseSide($side, int $size)` - deletes a piece of image from specific side. For example, if $side=top and $size=100, 100px from top will be deleted.
 
 ### Rotation && Mirroring
-- `public function rotate($angle, $bgColor = 0)`
-
-  Rotates an image. `True` equals 90°, `False` equals -90°.
-- `public function flip($horizontally = true)`
-
-  Flips an image horizontally or vertically.
+- `public function rotate($angle, $bgColor = 0)` - rotates an image. `True` equals 90°, `False` equals -90°.
+- `public function flip($horizontally = true)` - flips an image horizontally or vertically.
 
 ### Collage
 - `public function appendImageTo($side, Imagery $appendix, int $modifiers)`
