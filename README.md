@@ -56,22 +56,14 @@ Possible `$format` values: `jpeg, png, gif, bmp, wbmp`. Quality is an integer va
 - `public function flip($horizontally = true)` - flips an image horizontally or vertically.
 
 ### Collage
-- `public function appendImageTo($side, Imagery $appendix, int $modifiers)`
-
-  Appends an image (`$appendix`) to current image at `$side` (`top|bottom|left|right`). Modifiers:
+- `public function appendImageTo($side, Imagery $appendix, int $modifiers)` - appends an image (`$appendix`) to current image at `$side` (`top|bottom|left|right`). Modifiers:
   - `Imagery::ZOOM_IF_LARGER` - appendix' height will be zoomed (not resized) if it's larger than current image's one (when appending to left or right side); appendix' width will be zoomed (not resized) if it's larger than current image's one (when appending to top or bottom side);
-- `public function placeImageAt($x, $y, Imagery $image)`
+- `public function placeImageAt($x, $y, Imagery $image)` - places an image atop current image at `$x` X `$y`.
 
-  Places an image atop current image at `$x` X `$y`.
-
-- `public function placeImageAtCenter(Imagery $image)`
-
-  Places an image in the center of current image.
+- `public function placeImageAtCenter(Imagery $image)` - places an image in the center of current image.
 
 ### Effects
-- `public function filter($filter)`
-
-  Applies grayscale or negate filter. Pass `Imagery::FILTER_NEGATE` or `Imagery::FILTER_GRAYSCALE` as $filter.
+- `public function filter($filter)` - applies grayscale or negate filter. Pass `Imagery::FILTER_NEGATE` or `Imagery::FILTER_GRAYSCALE` as $filter.
 
   Grayscale:
 
@@ -85,49 +77,37 @@ Possible `$format` values: `jpeg, png, gif, bmp, wbmp`. Quality is an integer va
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/negate_original.png)
 
-- `public function changeContrast($newValue)`
-
-  Changes contrast of image. New values can be in range from 100 (max contrast) to -100 (min contrast), 0 means no change.
+- `public function changeContrast($newValue)` - changes contrast of image. New values can be in range from 100 (max contrast) to -100 (min contrast), 0 means no change.
 
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/contrast_original.png)
 
-- `public function changeBrightness($newValue)`
-
-  Changes brightness of image. New values can be in range from 255 (max brightness) to -255 (min brightness), 0 means no change.
+- `public function changeBrightness($newValue)` - changes brightness of image. New values can be in range from 255 (max brightness) to -255 (min brightness), 0 means no change.
 
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/brightness_original.png)
 
-- `public function colorize($red, $green, $blue, $alpha = 127)`
-
-  Changes colors of image. Colors (`$red, $green, $blue`) can be in range from 255 to -255. `$alpha` from 127 to 0.
+- `public function colorize($red, $green, $blue, $alpha = 127)` - changes colors of image. Colors (`$red, $green, $blue`) can be in range from 255 to -255. `$alpha` from 127 to 0.
 
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/colorize_original.png)
 
-- `public function blur($method)`
-
-  Blurs an image. Method can be `Imagery::GAUSSIAN_BLUR` or `Imagery::SELECTIVE_BLUR`.
+- `public function blur($method)` - blurs an image. Method can be `Imagery::GAUSSIAN_BLUR` or `Imagery::SELECTIVE_BLUR`.
 
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/blur_original.png)
 
-- `public function smooth($level)`
-
-  Smooths an image. Level of smoothness can be in range from 0 to 8. 8 is un-smooth.
+- `public function smooth($level)` - smooths an image. Level of smoothness can be in range from 0 to 8. 8 is un-smooth.
 
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
   ![Negate](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/smooth_original.png)
 
-- `public function pixelate($blockSize = 5, $useModernEffect = true)`
-
-  Pixelates an image. `$blockSize` is size of pixel block.
+- `public function pixelate($blockSize = 5, $useModernEffect = true)` - pixelates an image. `$blockSize` is size of pixel block.
 
   ![Original](https://github.com/wapmorgan/Imagery/releases/download/1.0.0/original.png)
   ->
