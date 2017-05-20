@@ -51,6 +51,15 @@ class Imagery {
 			case IMAGETYPE_BMP:
 				$image = imagecreatefrombmp($filename);
 				break;
+			case IMAGETYPE_XBM:
+				$image = imagecreatefromxbm($filename);
+				break;
+			case IMAGETYPE_XPM:
+				$image = imagecreatefromxpm($filename);
+				break;
+			case IMAGETYPE_WEBP:
+				$image = imagecreatefromwebp($filename);
+				break;
 			default:
 				throw new Exception('Unknown image format!');
 				break;
@@ -357,7 +366,10 @@ class Imagery {
 	 * + jpeg (or jpg)
 	 * + png
 	 * + gif
+	 * + bmp
 	 * + wbmp
+	 * + xbm
+	 * + webp (>= 7.1.0)
 	 * @param int $quality Image quality. An abstract value between 0 (worst) and 100 (best).
 	 * When you save to png, it automatically transfers to appliable value.
 	 * If not set, save function will be called without passing quality param.
@@ -390,6 +402,14 @@ class Imagery {
 			case IMAGETYPE_WBMP:
 			case 'wbmp':
 				imagewbmp($this->_image, $filename);
+				break;
+			case IMAGETYPE_WEBP:
+			case 'webp':
+				imagewebp($this->_image, $filename, $quality);
+				break;
+			case IMAGETYPE_XBM:
+			case 'xbm':
+				imagexbm($this->_image, $image);
 				break;
 			default:
 				throw new Exception('Unknown (format) "'.$format.'"!');
