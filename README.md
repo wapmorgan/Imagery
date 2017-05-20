@@ -28,13 +28,13 @@ use Imagery\Imagery;
 ```
 ### Opening
 Create new Imagery object:
-- `$image = Imagery::open($filename);` - from a file. Supports JPEG, PNG, GIF, BMP, WBMP
+- `$image = Imagery::open($filename);` - from a file.
 - `$image = Imagery::create($width, $height);` - new image
 - `$image = new Imagery(imagecreatefrombmp('image.bmp'));` - from a resource
 
 ### Saving
 - `public function save($filename, $quality = 75, $format = null)` - saves image to disk.
-Possible `$format` values: `jpeg, png, gif, bmp, wbmp`. Quality is an integer value between `0` (worst) and `100` (best). Default is `75`. If `$format` can not be determined by filename extension, specifcy it explicitly.
+Quality is an integer value between `0` (worst) and `100` (best). Default is `75`. Quality is applicable only to JPEG, PNG, WEBP. If `$format` can not be determined by filename extension, specifcy it explicitly.
 
 Formats supports:
 
