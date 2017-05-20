@@ -426,8 +426,10 @@ class Imagery {
 		if (function_exists('imageflip')) {
 			imageflip($this->_image, $horizontal ? IMG_FLIP_HORIZONTAL : IMG_FLIP_VERTICAL);
 		} else {
+			$image = imagecreatetruecolor($this->width, $this->height);
+			imagealphablending($image, false);
+			imagesavealpha($image, true);
 			if ($horizontal) {
-				$image = imagecreatetruecolor($this->width, $this->height);
 				$dst_y = 0;
 				$src_y = 0;
 				$coordinate = ($this->width - 1);
@@ -436,10 +438,7 @@ class Imagery {
 					$dst_x = $coordinate - $range;
 					imagecopy($image, $this->_image, $dst_x, $dst_y, $src_x, $src_y, 1, $this->height);
 				}
-				imagedestroy($this->_image);
-				$this->_image = $image;
 			} else {
-				$image = imagecreatetruecolor($this->width, $this->height);
 				$dst_x = 0;
 				$src_x = 0;
 				$coordinate = ($this->height - 1);
@@ -448,9 +447,9 @@ class Imagery {
 					$dst_y = $coordinate - $range;
 					imagecopy($image, $this->_image, $dst_x, $dst_y, $src_x, $src_y, $this->width, 1);
 				}
-				imagedestroy($this->_image);
-				$this->_image = $image;
 			}
+			imagedestroy($this->_image);
+			$this->_image = $image;
 		}
 		return $this;
 	}
